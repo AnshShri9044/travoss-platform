@@ -1,0 +1,34 @@
+services:
+  # 🚀 Travoss Backend (Node.js Express)
+  - type: web
+    name: travoss-backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false
+        # Put your MongoDB Atlas connection string here or set it in Render dashboard
+        placeholder: mongodb+srv://<username>:<password>@cluster.mongodb.net/travoss
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+
+  # 🎨 Travoss Frontend (React Static)
+  - type: static
+    name: travoss-frontend
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
+    envVars:
+      - key: REACT_APP_API_URL
+        # Note: Render will fill this after backend is created.
+        # It's better to provide the full URL if known, or let Render construct it.
+        # Below is the predicted URL based on service name "travoss-backend"
+        value: https://travoss-backend.onrender.com/api
